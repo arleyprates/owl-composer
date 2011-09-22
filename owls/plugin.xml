@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="OWLS.contribution1"
+            nameFilter="*.wsdl"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               label="OWLS Composer"
+               path="additions"
+               id="OWLS.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Convert to owl-s"
+               class="owls.actions.ConvertWSDL2OWLSAction"
+               menubarPath="OWLS.menu1/group1"
+               enablesFor="1"
+               id="OWLS.action1">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="OWLS.contribution2"
+            nameFilter="*.owls_diagram"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="owls.actions.OwlsFileGenerator"
+               enablesFor="1"
+               id="owls.action2"
+               label="Generate Owls File"
+               menubarPath="OWLS.menu2/group2">
+         </action>
+         <menu
+               id="OWLS.menu2"
+               label="OWLS Composer"
+               path="additions">
+            <groupMarker
+                  name="group2">
+            </groupMarker>
+         </menu>
+      </objectContribution>
+      <objectContribution
+            id="OWLS.contribution3"
+            nameFilter="*.owl"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               id="OWLS.menu3"
+               label="OWL-S Composer"
+               path="additions">
+            <groupMarker
+                  name="group3">
+            </groupMarker>
+         </menu>
+         <action
+               class="owls.actions.RunCompositionAction"
+               enablesFor="1"
+               id="owls.action3"
+               label="Run Composition"
+               menubarPath="OWLS.menu3/group3">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="owls.diagram.category"
+            class="owls.wizards.WSDL2OWLwizard"
+            id="owls.WSDL2OWLSWizard"
+            name="WSDLOWL Transformation ">
+         <description>
+            Create a new Owl file based on the transformation from a Wsdl file.
+         </description>
+      </wizard>
+      <wizard
+            category="owls.diagram.category"
+            class="owls.wizards.OwlsFileGenerationWizard"
+            id="owls.FileGeneratorWizard"
+            name="OWL-S File Generator">
+         <description>
+            Create a new Owl file based on the transformation from an Owl diagram.
+         </description>
+      </wizard>
+      <wizard
+            category="owls.diagram.category"
+            class="owls.wizards.RunCompositionWizard"
+            hasPages="true"
+            id="owls.RunCompositionWizard"
+            name="Run Composition">
+      </wizard>
+   </extension>
+
+</plugin>
