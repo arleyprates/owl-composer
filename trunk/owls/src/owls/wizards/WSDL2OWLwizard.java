@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,6 +41,7 @@ public class WSDL2OWLwizard extends Wizard implements INewWizard{
 	
 	public WSDL2OWLwizard(){
 		super();
+		Activator.getDefault().init();
 		setNeedsProgressMonitor(true);
 	}
 	
@@ -79,11 +81,17 @@ public class WSDL2OWLwizard extends Wizard implements INewWizard{
 			String namespaceName,
 			IProgressMonitor monitor)
 			throws CoreException {
-		
+			IPath filePath = Activator.getCurrentFilePath();
+			String wsdlFileName = "";
+			System.out.println("AQUI 0");
+			if(filePath != null){
+				wsdlFileName = filePath.lastSegment();
+			}
 			// create the owl file from the given wsdl
-			monitor.beginTask("Creating " + Activator.getCurrentFilePath().lastSegment() + ".owl", 2);
+			monitor.beginTask("Creating " + wsdlFileName + ".owl", 2);
+			System.out.println("AQUI 1");
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(Activator.getCurrentProject().getName());
-		
+			System.out.println("AQUI 2");
 			// calling the JAXSA project to make this job (see at http://sourceforge.net/projects/jax-sa/)
 			try {
 				System.out.println("DEBUG<Owls>: Chamada ao JAXSA");

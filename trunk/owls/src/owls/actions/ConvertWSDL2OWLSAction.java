@@ -46,7 +46,6 @@ public class ConvertWSDL2OWLSAction implements IObjectActionDelegate {
 	 * @see IActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
-		Activator.getDefault().init();
 		
 		WSDL2OWLwizard wizard = new WSDL2OWLwizard();
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();

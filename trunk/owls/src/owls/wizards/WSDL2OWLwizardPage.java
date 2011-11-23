@@ -97,20 +97,25 @@ public class WSDL2OWLwizardPage extends WizardPage {
 	 */
 	
 	private void initialize() {
-		if ((Activator.getCurrentFilePath())!=null) {
-			fileText.setText(Activator.getCurrentFilePath().toString());
-			
-			String fileName = Activator.getCurrentFilePath().lastSegment().toString();
-			
-			int dotLoc = fileName.lastIndexOf('.');
-			if (dotLoc != -1) {
+		if(Activator.getCurrentProject() != null){
+				if ((Activator.getCurrentFilePath())!=null) {
+					fileText.setText(Activator.getCurrentFilePath().toString());
+					
+					String fileName = Activator.getCurrentFilePath().lastSegment().toString();
+					
+					int dotLoc = fileName.lastIndexOf('.');
+					if (dotLoc != -1) {
+						namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
+								"/owls/"+fileName.substring(0, dotLoc)+".owl");
+					}
+					return;
+				}
 				namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
-						"/owls/"+fileName.substring(0, dotLoc)+".owl");
-			}
-			return;
+				"/owls/WebService.owl");
 		}
-		namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
-		"/owls/WebService.owl");
+		else{
+			namespaceText.setText("http://localhost:8080/");
+		}
 	}
 	
 	/**

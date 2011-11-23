@@ -9,7 +9,7 @@
             nameFilter="*.wsdl"
             objectClass="org.eclipse.core.resources.IFile">
          <menu
-               label="OWLS Composer"
+               label="%menu.label"
                path="additions"
                id="OWLS.menu1">
             <separator
@@ -17,7 +17,7 @@
             </separator>
          </menu>
          <action
-               label="Convert to owl-s"
+               label="%action.label"
                class="owls.actions.ConvertWSDL2OWLSAction"
                menubarPath="OWLS.menu1/group1"
                enablesFor="1"
@@ -32,12 +32,12 @@
                class="owls.actions.OwlsFileGenerator"
                enablesFor="1"
                id="owls.action2"
-               label="Generate Owls File"
+               label="%action.label.0"
                menubarPath="OWLS.menu2/group2">
          </action>
          <menu
                id="OWLS.menu2"
-               label="OWLS Composer"
+               label="%menu.label.0"
                path="additions">
             <groupMarker
                   name="group2">
@@ -50,7 +50,7 @@
             objectClass="org.eclipse.core.resources.IFile">
          <menu
                id="OWLS.menu3"
-               label="OWL-S Composer"
+               label="%menu.label.1"
                path="additions">
             <groupMarker
                   name="group3">
@@ -60,7 +60,7 @@
                class="owls.actions.RunCompositionAction"
                enablesFor="1"
                id="owls.action3"
-               label="Run Composition"
+               label="%action.label.1"
                menubarPath="OWLS.menu3/group3">
          </action>
       </objectContribution>
@@ -70,19 +70,20 @@
       <wizard
             category="owls.diagram.category"
             class="owls.wizards.WSDL2OWLwizard"
+            hasPages="true"
             id="owls.WSDL2OWLSWizard"
-            name="WSDLOWL Transformation ">
+            name="%wizard.name">
          <description>
-            Create a new Owl file based on the transformation from a Wsdl file.
+            %wizard.description
          </description>
       </wizard>
       <wizard
             category="owls.diagram.category"
             class="owls.wizards.OwlsFileGenerationWizard"
             id="owls.FileGeneratorWizard"
-            name="OWL-S File Generator">
+            name="%wizard.name.0">
          <description>
-            Create a new Owl file based on the transformation from an Owl diagram.
+            %wizard.description.0
          </description>
       </wizard>
       <wizard
@@ -90,7 +91,7 @@
             class="owls.wizards.RunCompositionWizard"
             hasPages="true"
             id="owls.RunCompositionWizard"
-            name="Run Composition">
+            name="%wizard.name.1">
       </wizard>
    </extension>
 

@@ -36,5 +36,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gmf.runtime.draw2d.ui;visibility:=reexport,
  org.eclipse.ocl.ecore;visibility:=reexport,
  org.eclipse.draw2d;visibility:=reexport,
- org.eclipse.emf.validation;visibility:=reexport
+ org.eclipse.emf.validation;visibility:=reexport,
+ owls
 Eclipse-LazyStart: true
+Import-Package: org.mindswap.owls.grounding,
+ org.mindswap.owls.process,
+ org.mindswap.owls.service,
+ pf.main,
+ pf.vo
