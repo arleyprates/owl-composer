@@ -46,7 +46,7 @@
    <extension point="org.eclipse.ui.newWizards">
       <?gmfgen generated="false"?>
   	  <wizard
-  	     name="OWL-S Diagram"
+  	     name="%wizard.name"
   	     icon="icons/obj16/OwlsDiagramFile.gif"
   	     category="owls.diagram.category"
   	     class="owls.diagram.part.OwlsCreationWizard"
@@ -55,15 +55,15 @@
       </wizard>
      <category
            id="owls.diagram.category"
-           name="OWL-S Composer">
+           name="%category.name">
      </category>
      <wizard
            category="owls.diagram.category"
            class="owls.diagram.part.DiscoverSimilarServicesWizard"
            id="owls.diagram.DiscoverSimilarServices"
-           name="Discover Similar Services">
+           name="%wizard.name.0">
         <description>
-           Discover a composition similar of the selected one.
+           %wizard.description
         </description>
      </wizard>
    </extension>
@@ -627,7 +627,7 @@
          <Priority name="Lowest"/>
       </MarkerNavigationProvider>
    </extension>
-<extension id="diagnostic" name="Owls Plugin problems" point="org.eclipse.core.resources.markers">
+<extension id="diagnostic" name="%extension.name" point="org.eclipse.core.resources.markers">
       <?gmfgen generated="true"?>
       <super type="org.eclipse.core.resources.problemmarker"/>
       <super type="org.eclipse.gmf.runtime.common.ui.services.marker"/>
@@ -635,10 +635,10 @@
    </extension>
 <extension point="org.eclipse.emf.validation.constraintProviders">
       <?gmfgen generated="true"?>
-            <category id="owlsAudits" mandatory="false" name="Owls Audits">
+            <category id="owlsAudits" mandatory="false" name="%category.name.0">
          <![CDATA[]]>
       </category>
-      <category id="owlsAudits/inputAudit" mandatory="false" name="Input Audits">
+      <category id="owlsAudits/inputAudit" mandatory="false" name="%category.name.1">
          <![CDATA[]]>
       </category>
       <constraintProvider cache="true">
@@ -648,12 +648,12 @@
          <constraints categories="owlsAudits/inputAudit">
                   <constraint id="usedInput"
             lang="Java" class="owls.diagram.providers.OwlsValidationProvider$Adapter1"
-            name="Used input check"
+            name="%constraint.name"
             mode="Live"
             severity="ERROR" statusCode="200">
             
-            <description><![CDATA[Check if an input was reference by two or more assigns.]]></description>
-            <message><![CDATA[An input that was referenced by two or more assigns was found. ]]></message>
+            <description>%constraint.description</description>
+            <message>%constraint.message</message>
             <target class="owls.OwlsAssign"/>
          </constraint>
                   </constraints>
@@ -669,7 +669,7 @@
                </binding>
                </extension>
 <extension
-      id="owls.diagram.DiscoverServices"
+      id="%extension.id"
       name="Discover Similar Services"
       point="org.eclipse.ui.popupMenus">
    <objectContribution
@@ -680,7 +680,7 @@
             class="owls.diagram.part.DiscoverSimilarServicesAction"
             enablesFor="1"
             id="owls.diagram.action1"
-            label="Discover Similar Services"
+            label="%action.label"
             menubarPath="OWLS.menu2/group2">
       </action>
    </objectContribution>

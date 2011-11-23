@@ -85,17 +85,23 @@ public class CompositionNamespaceWizardPage extends WizardPage {
 	 */
 	
 	private void initialize() {
-		if ((Activator.getCurrentFilePath())!=null) {			
-			String fileName = Activator.getCurrentFilePath().lastSegment().toString();			
-			int dotLoc = fileName.lastIndexOf('.');
-			if (dotLoc != -1) {
-				namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
-						"/owls/"+fileName.substring(0, dotLoc)+".owl");
+		if(Activator.getCurrentProject() != null){
+			if ((Activator.getCurrentFilePath())!=null) {			
+				String fileName = Activator.getCurrentFilePath().lastSegment().toString();			
+				int dotLoc = fileName.lastIndexOf('.');
+				if (dotLoc != -1) {
+					namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
+							"/owls/"+fileName.substring(0, dotLoc)+".owl");
+				}
+				return;
 			}
-			return;
+			namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
+							"/owls/");
 		}
-		namespaceText.setText("http://localhost:8080/"+Activator.getCurrentProject().getName()+
-						"/owls/WebService.owl");
+		else{
+			namespaceText.setText("http://localhost:8080/");
+		}
+		
 	}
 
 	public Text getNamespaceText() {
