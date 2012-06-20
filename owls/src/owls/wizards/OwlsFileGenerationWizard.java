@@ -73,6 +73,8 @@ public class OwlsFileGenerationWizard extends Wizard implements INewWizard{
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
+			System.err.println("ERRO ENCONTRADO NA CRIACAO DO CONTAINER - OwlsFileGenerationWizard");
+			e.printStackTrace(System.err);
 			MessageDialog.openError(getShell(), "Error", realException.getMessage());
 			return false;
 		}

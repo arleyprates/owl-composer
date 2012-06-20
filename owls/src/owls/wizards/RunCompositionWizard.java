@@ -11,6 +11,9 @@
 
 package owls.wizards;
 
+import impl.owls.sh.CloudKnowledgeBase;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -20,13 +23,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.mindswap.owl.OWLDataValue;
-import org.mindswap.owl.OWLIndividual;
 import org.mindswap.owls.OWLSFactory;
 import org.mindswap.owls.process.execution.ProcessExecutionEngine;
 import org.mindswap.query.ValueMap;
-import org.mindswap.utils.Utils;
 
-
+import owls.cloud.DescriptorKB;
 import owls.plugin.Activator;
 
 /**
@@ -44,6 +45,7 @@ public class RunCompositionWizard extends Wizard implements INewWizard{
 		setNeedsProgressMonitor(true);
 	}
 
+	@Override
 	public void addPages() {
 		pageNamespace = new CompositionNamespaceWizardPage();
 		addPage(pageNamespace);
@@ -68,9 +70,12 @@ public class RunCompositionWizard extends Wizard implements INewWizard{
 		ValueMap aInputValueMap = pageInput.getAInputValueMap();
 
 		try {
+			CloudKnowledgeBase cb = new CloudKnowledgeBase();
+			cb.setOwlsFolder(Activator.getCurrentProject().getName()+"/WebContent/owls/");
+			cb.setCloudFolder(DescriptorKB.createCompositionPath(aProcess));
 			// run the process
 			System.out.println("Executando process");
-			ValueMap aOutputValueMap = exec.execute(aProcess, aInputValueMap);
+			ValueMap aOutputValueMap = exec.execute(aProcess, aInputValueMap, cb);
 			System.out.println("debug: " + aOutputValueMap.debugString());
 			System.out.println("depois da execucao");
 			
@@ -99,7 +104,7 @@ public class RunCompositionWizard extends Wizard implements INewWizard{
 		} catch (Exception e) {
 			// TODO Fix error message
 			ErrorDialog.openError(getShell(), "Error", "Error while trying to run the service.",
-					new Status(Status.ERROR, Activator.PLUGIN_ID, Status.ERROR, "", e));
+					new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, "", e));
 		}  
 
 		return true;
