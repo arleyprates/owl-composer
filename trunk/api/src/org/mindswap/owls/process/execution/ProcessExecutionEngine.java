@@ -25,6 +25,8 @@
  */
 package org.mindswap.owls.process.execution;
 
+import impl.owls.sh.CloudKnowledgeBase;
+
 import java.util.EventListener;
 
 import org.mindswap.owl.OWLKnowledgeBase;
@@ -102,6 +104,8 @@ public interface ProcessExecutionEngine extends EventListener {
 	 * execution is not successful
 	 */
 	public ValueMap execute(Process p, ValueMap bindings) throws Exception;
+	
+	public ValueMap execute(Process p, ValueMap bindings, CloudKnowledgeBase shKb) throws Exception;
 	
 	/**
 	 * Execute the given perform construct. Perform shoud contain all the necessary input

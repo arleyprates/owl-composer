@@ -89,14 +89,13 @@ public class RunService {
 	public void runZipCode() throws Exception {
 	    OWLKnowledgeBase kb = OWLFactory.createKB();
 
-	    service = kb.readService("http://localhost:8080/Calculadora/owls/soma_Calculadora.owl");
+	    service = kb.readService("http://localhost:8080/Temperatura/owls/getNameCar_NameCar.owl");
 		process = service.getProcess();		
 
 		// initialize the input values to be empty
 		values = new ValueMap();
 		
-		values.setDataValue(process.getInput("parcela1"), "1");			
-		values.setDataValue(process.getInput("parcela2"), "2");
+		values.setDataValue(process.getInput("arg0"), "CARRO");			
 
 		values = exec.execute(process, values);	
 	

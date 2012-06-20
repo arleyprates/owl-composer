@@ -33,7 +33,7 @@ public class ReplaceByEquivalent extends SHDiagnostic {
 		ValueMap result = null;
 		OWLKnowledgeBase kb = objectRequest.getKb();
 		System.out.println("uri: " + objectRequest.getGrounding().getProcess().getURI());
-		String newURI = getEquivalentURI(objectRequest.getGrounding().getProcess().getURI().toString());
+		String newURI = getEquivalentURI(objectRequest.getGrounding().getProcess().getURI().toString(), objectRequest.getCB().getOwlsFolder(),null);
 		
 		try {
 			Service aService = kb.readService(newURI);
@@ -74,67 +74,6 @@ public class ReplaceByEquivalent extends SHDiagnostic {
 		
 		System.out.println("Successful ReplaceByEquivalent!");
 		return result;
-	}
-	
-	private String getEquivalentURI(String processURI) {
-		MainFunctionalMatcher matcher = new MainFunctionalMatcher();
-		List<pf.vo.Service> servicesDiscovered = null;
-		Map<String, ArrayList<SimilarityDegree>> resultInput = new HashMap<String, ArrayList<SimilarityDegree>>();
-		Map<String, ArrayList<SimilarityDegree>> resultOutput = new HashMap<String, ArrayList<SimilarityDegree>>();
-		
-		try {
-			//TODO Colocar aqui o path correto
-			processURI.split("/");
-			String directoryPath = "http://localhost:8080/axis/wsFinal/";
-			servicesDiscovered = matcher.discoverServices(processURI, directoryPath);
-			resultInput = matcher.getResultInputs();
-			resultOutput = matcher.getResultOutputs();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		List<SimilarService> serviceList = new ArrayList<SimilarService>();
-		for (pf.vo.Service service : servicesDiscovered) {
-			if (service.getDegreeMatch().equals("EXACT")) {
-				SimilarService newService = new SimilarService(service.getUri().getRawPath(),
-						Degree.EXACT);
-				newService.inputList = resultInput.get(service.getUri().toString());
-				newService.outputList = resultOutput.get(service.getUri().toString());
-				serviceList.add(newService);
-			} else if (service.getDegreeMatch().equals("PLUGIN")) {
-				SimilarService newService = new SimilarService(service.getUri().getRawPath(),
-						Degree.PLUGIN);
-				newService.inputList = resultInput.get(service.getUri().toString());
-				newService.outputList = resultOutput.get(service.getUri().toString());
-				serviceList.add(newService);
-			} else if (service.getDegreeMatch().equals("SUBSUMES")) {
-				SimilarService newService = new SimilarService(service.getUri().getRawPath(),
-						Degree.SUBSUMES);
-				newService.inputList = resultInput.get(service.getUri().toString());
-				newService.outputList = resultOutput.get(service.getUri().toString());
-				serviceList.add(newService);
-			} else if (service.getDegreeMatch().equals("SIBLING")) {
-				SimilarService newService = new SimilarService(service.getUri().getRawPath(),
-						Degree.SIBLING);
-				newService.inputList = resultInput.get(service.getUri().toString());
-				newService.outputList = resultOutput.get(service.getUri().toString());
-				serviceList.add(newService);
-			}
-		}
-		
-		// Sort serviceList by degree
-		Collections.sort(serviceList);
-		System.out.println("SERVICES DISCOVERED FOR " + processURI + ":");
-		
-		for (SimilarService similarService : serviceList) {
-			System.out.println(similarService.path + " - "								
-					+ similarService.degree);
-		}
-		
-		if(serviceList.size() > 0)
-			return serviceList.get(0).path;
-		
-		return "";
 	}
 	
 	public boolean canExecute(ObjectRequest objectRequest) {

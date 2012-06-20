@@ -27,6 +27,8 @@
 package impl.owls.process.execution;
 
 import impl.owls.sh.SHMonitor;
+import impl.owls.sh.CloudKnowledgeBase;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -96,6 +98,8 @@ public class ProcessExecutionEngineImpl implements ProcessExecutionEngine {
 
 	protected OWLKnowledgeBase env;
 	protected OWLKnowledgeBase kb;
+	//Adicionado por Fabricio
+	protected CloudKnowledgeBase shKb;
 	protected boolean checkPreconditions;
 	protected boolean allowMultipleSatisifedPreconditions;
 
@@ -171,6 +175,20 @@ public class ProcessExecutionEngineImpl implements ProcessExecutionEngine {
 	public ValueMap execute(Process p) {
 		return execute(p, new ValueMap());
 	}
+	
+	///**********************************************///
+	///**********************************************///
+	/// execucao de composicao em nuvem				 ///
+	public ValueMap execute(Process p, ValueMap values, CloudKnowledgeBase shKb) {
+		initEnv(p.getKB());
+		this.shKb = shKb;
+		values = executeProcess(p, values);
+
+		notifyListeners("[DONE]");
+		finishExecution(ProcessExecutionListener.EXEC_DONE);
+
+		return values;
+	}
 
 	public ValueMap execute(Process p, ValueMap values) {
 		initEnv(p.getKB());
@@ -182,7 +200,7 @@ public class ProcessExecutionEngineImpl implements ProcessExecutionEngine {
 
 		return values;
 	}
-
+	
 	public ValueMap execute(Perform p) {
 		initEnv(p.getKB());
 
@@ -232,7 +250,7 @@ public class ProcessExecutionEngineImpl implements ProcessExecutionEngine {
 
 			JOptionPane.showConfirmDialog(null, "Fault!");
 
-			result = SHMonitor.getInstance().handleHealing(grounding, env, values, ee.toString());
+			result = SHMonitor.getInstance().handleHealing(grounding, env, shKb, values, ee.toString());
 		}
 		System.out.println("DEBUG: pass the result");
 		if(DEBUG) System.out.println("Result:\n" + result.debugString() + "\n");
@@ -352,25 +370,25 @@ public class ProcessExecutionEngineImpl implements ProcessExecutionEngine {
 			System.out.println("Fez o Cast");
 			executePerform(perform);
 		} else if(cc instanceof Sequence) {
-			executeSequence((Sequence) cc); System.out.println("a1");
+			executeSequence((Sequence) cc); System.out.println("Sequence");
 		} else if(cc instanceof AnyOrder) {
-			executeAnyOrder((AnyOrder) cc); System.out.println("a2");
+			executeAnyOrder((AnyOrder) cc); System.out.println("AnyOrder");
 		} else if(cc instanceof Choice) {
-			executeChoice((Choice) cc); System.out.println("a3");
+			executeChoice((Choice) cc); System.out.println("Choice");
 		} else if(cc instanceof IfThenElse) {
-			executeIfThenElse((IfThenElse) cc); System.out.println("a4");
+			executeIfThenElse((IfThenElse) cc); System.out.println("IfThenElse");
 		} else if(cc instanceof RepeatWhile) {
-			executeRepeatWhile((RepeatWhile) cc); System.out.println("a5");
+			executeRepeatWhile((RepeatWhile) cc); System.out.println("RepeatWhile");
 		} else if(cc instanceof RepeatUntil) {
-			executeRepeatUntil((RepeatUntil) cc); System.out.println("a6"); 
+			executeRepeatUntil((RepeatUntil) cc); System.out.println("RepeatUntil"); 
 		} else if(cc instanceof Split) {
-			executeParallel(((Split)cc).getComponents(), false); System.out.println("a7");
+			executeParallel(((Split)cc).getComponents(), false); System.out.println("Split");
 		} else if(cc instanceof SplitJoin) {
-			executeParallel(((SplitJoin)cc).getComponents(), true); System.out.println("a8");
+			executeParallel(((SplitJoin)cc).getComponents(), true); System.out.println("SplitJoin");
 		} else if(cc instanceof Produce) {
-			executeProduce((Produce)cc); System.out.println("a9");
+			executeProduce((Produce)cc); System.out.println("Produce");
 		} else if(cc instanceof ForEach) {
-			executeForEach((ForEach)cc); System.out.println("a10");
+			executeForEach((ForEach)cc); System.out.println("ForEach");
 		} else
 			throw new NotImplementedException(
 					"Executing control construct " + cc.getConstructName() + " is not implemented");
