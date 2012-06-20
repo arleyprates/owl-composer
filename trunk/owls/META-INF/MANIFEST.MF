@@ -1623,6 +1623,7 @@ Export-Package: EDU.oswego.cs.dl.util.concurrent,
  org.xml.sax.helpers;uses:="org.xml.sax",
  owls;uses:="org.eclipse.emf.ecore,org.eclipse.emf.common.util",
  owls.actions;uses:="org.eclipse.jface.action,org.eclipse.ui,org.eclipse.jface.viewers",
+ owls.cloud,
  owls.facade;uses:="org.eclipse.emf.common.util,org.mindswap.owl,owls",
  owls.generator,
  owls.impl;
@@ -1700,3 +1701,5 @@ Bundle-ClassPath: lib/owl-s.jar,
  lib/jaxsa.jar,
  lib/owlsDiscovey.jar
 Bundle-Vendor: %Bundle-Vendor
+Import-Package: org.eclipse.emf.transaction,
+ org.eclipse.gmf.runtime.emf.core
