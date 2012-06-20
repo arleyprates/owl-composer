@@ -2,6 +2,7 @@ package owls.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -14,10 +15,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import owls.cloud.DescriptorKB;
 import owls.facade.OwlsInitializerFacade;
-
-import pf.main.MainFunctionalMatcher;
-import pf.vo.Service;
 
 /**
  * @generated
@@ -150,7 +149,7 @@ public class OwlsCreationWizard extends Wizard implements INewWizard {
 				OwlsInitializerFacade facade = new OwlsInitializerFacade();
 				attributesFilePage.setInitializationValues(facade);
 				importsFilePage.setSelectedFiles(facade);
-
+				
 				diagram = OwlsDiagramEditorUtil.createDiagram(
 						diagramModelFilePage.getURI(), facade, monitor);
 				if (isOpenNewlyCreatedDiagramEditor() && diagram != null) {
@@ -166,6 +165,12 @@ public class OwlsCreationWizard extends Wizard implements INewWizard {
 		};
 		try {
 			getContainer().run(false, true, op);
+			String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+			String filename = attributesFilePage.getServiceText();
+			String filePath = diagramModelFilePage.getFilePath().removeLastSegments(1).toString();
+			System.out.println("CRIANDO DOCUMENTO: "+filePath+"/"+filename+".cpd");
+			DescriptorKB descriptorKB = new DescriptorKB(filePath+"/"+filename+".cpd", importsFilePage.descriptorsList);
+			descriptorKB.createDescriptorKB();
 		} catch (InterruptedException e) {
 			return false;
 		} catch (InvocationTargetException e) {

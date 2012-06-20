@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -40,6 +41,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FileSystemElement;
@@ -51,7 +53,13 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
 import org.eclipse.ui.wizards.datatransfer.IImportStructureProvider;
 
+import owls.cloud.PublishDescriptor;
 import owls.facade.OwlsInitializerFacade;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 
 /**
@@ -63,6 +71,8 @@ implements Listener{
 	
 	// widgets
     protected Combo sourceNameField;
+    
+    protected Text publisherDescriptorField;
 
     protected Button createContainerStructureButton;
 
@@ -84,6 +94,8 @@ implements Listener{
     
     // selection list
     protected List selectionList;
+    
+    protected ArrayList<PublishDescriptor> descriptorsList;
 
 	/**
      *	Creates an instance of this class
@@ -120,7 +132,12 @@ implements Listener{
                 | GridData.HORIZONTAL_ALIGN_FILL));
         composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         composite.setFont(parent.getFont());
-
+        Label label = new Label(composite, SWT.NULL);
+		label.setText("Enter the Publish Descriptor URI (optional, comma-separated)");
+		publisherDescriptorField = new Text(composite, SWT.BORDER | SWT.SINGLE);
+		publisherDescriptorField.setData("publishDescriptor", "publishDescriptor");
+		publisherDescriptorField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
         createSourceGroup(composite);
 
         restoreWidgetValues();
@@ -140,7 +157,8 @@ implements Listener{
     protected void initialize(){
     	// Seting default path
         sourceNameField.setText(ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toOSString());
-        setMessage("Select files with *.owl extension to compose an owl file.");
+        setMessage("Select files with *.owl extension to compose an owl file,");
+        descriptorsList = new ArrayList<PublishDescriptor>();
     }
 
     /**
@@ -295,6 +313,28 @@ implements Listener{
         
         Iterator resourcesEnum = getSelectionList().iterator();
         List fileSystemObjects = new ArrayList();
+        
+        String descriptors = publisherDescriptorField.getText();
+        StringTokenizer descriptorTokens = new StringTokenizer(descriptors, ",; ");
+        while(descriptorTokens.hasMoreTokens()){
+        	URL publishDescriptorURL;
+			try {
+				String descriptorURL = descriptorTokens.nextToken();
+				System.err.println(descriptorURL);
+				if(descriptorURL.length() > 0){
+					publishDescriptorURL = new URL(descriptorURL);
+					PublishDescriptor publishDescriptor = new PublishDescriptor(publishDescriptorURL);
+					fileSystemObjects.addAll(publishDescriptor.getOWLSFromFile());
+					
+					descriptorsList.add(publishDescriptor);
+				}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        //Save the descriptor File
+        
         while (resourcesEnum.hasNext()) {
             fileSystemObjects.add(((FileSystemElement) resourcesEnum.next())
                     .getFileSystemObject());
@@ -307,7 +347,7 @@ implements Listener{
 				facade.getComposedFiles().add(file);
 			}
 		}
-    	
+
         return;
     }
 
@@ -565,6 +605,13 @@ implements Listener{
         super.updateSelections(map);
     }
 
+    protected boolean validatePublisherDescriptor() {
+       if(publisherDescriptorField.getText() != ""){
+    	   return true;
+       }
+       return false;
+    }
+    
     /**
      *	Answer a boolean indicating whether self's source specification
      *	widgets currently all contain valid values.
@@ -589,7 +636,7 @@ implements Listener{
     
     @Override
     protected boolean determinePageCompletion() {
-        boolean complete = validateSourceGroup();
+        boolean complete = (validateSourceGroup()||validatePublisherDescriptor());
 
         // Avoid draw flicker by not clearing the error
         // message unless all is valid.
@@ -646,4 +693,7 @@ implements Listener{
 		this.selectionList = selectionList;
 	}
 	
+	public List getDescriptorsList() {
+		return descriptorsList;
+	}
 }
