@@ -12,6 +12,7 @@ public class ObjectRequest {
 	private ValueMap values;
 	private OWLKnowledgeBase kb;	
 	private KindFault kind;
+	private CloudKnowledgeBase cb;
 	
 	public AtomicGrounding getGrounding() {
 		return grounding;
@@ -22,6 +23,11 @@ public class ObjectRequest {
 	public ValueMap getValues() {
 		return values;
 	}
+	
+	public CloudKnowledgeBase getCB(){
+		return this.cb;
+	}
+	
 	public void setValues(ValueMap values) {
 		this.values = values;
 	}
@@ -31,6 +37,11 @@ public class ObjectRequest {
 	public void setKb(OWLKnowledgeBase kb) {
 		this.kb = kb;
 	}
+	
+	public void setCB(CloudKnowledgeBase cb){
+		this.cb = cb;
+	}
+	
 	public KindFault getKind() {
 		return kind;
 	}

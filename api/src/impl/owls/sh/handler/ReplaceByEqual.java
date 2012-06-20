@@ -1,18 +1,21 @@
 package impl.owls.sh.handler;
 
+import impl.owls.sh.Degree;
+import impl.owls.sh.ObjectRequest;
+import impl.owls.sh.SHHandler;
+
+import pf.main.MainFunctionalMatcher;
+import pf.matcher.implementations.functional.SimilarityDegree;
+
 import java.util.Iterator;
 
 import org.mindswap.exceptions.ExecutionException;
 import org.mindswap.owl.OWLKnowledgeBase;
-import org.mindswap.owls.grounding.AtomicGrounding;
 import org.mindswap.owls.process.AtomicProcess;
 import org.mindswap.owls.process.Input;
 import org.mindswap.owls.process.Output;
-import org.mindswap.owls.process.Process;
 import org.mindswap.owls.service.Service;
 import org.mindswap.query.ValueMap;
-import impl.owls.sh.ObjectRequest;
-import impl.owls.sh.SHHandler;
 
 public class ReplaceByEqual extends SHDiagnostic {
 	
@@ -24,8 +27,9 @@ public class ReplaceByEqual extends SHDiagnostic {
 		ValueMap result = null;
 		OWLKnowledgeBase kb = objectRequest.getKb();
 		System.out.println("uri: " + objectRequest.getGrounding().getProcess().getURI());
-		String newURI = objectRequest.getGrounding().getProcess().getURI().toString().replace("8080", "8100");
-		
+		String owlsFolder = objectRequest.getCB().getOwlsFolder();
+		//String newURI = objectRequest.getGrounding().getProcess().getURI().toString().replace("8080", "8100");
+		String newURI = getEquivalentURI(objectRequest.getGrounding().getProcess().getURI().toString(),owlsFolder,Degree.EXACT);
 		try {
 			Service aService = kb.readService(newURI);
 			System.out.println("New service: " + aService.getLabel());
