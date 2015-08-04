@@ -1,0 +1,1 @@
+From a design view into an executable environment, this project generate an OWL-s Composition with a self-healing mechanism in case of WS failure.
